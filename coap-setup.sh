@@ -5,7 +5,7 @@
 
 # Install missing packages
 apt-get update
-apt-get install asciidoc
+apt-get -y install asciidoc
 
 # Clone libcoap git repo and install it
 git clone https://github.com/obgm/libcoap
