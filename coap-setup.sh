@@ -14,6 +14,7 @@ cd libcoap
 ./configure --enable-examples --enable-documentation
 make
 make install
+cd ..
 
 # Fix
 grep -q -e "^export LD_LIBRARY_PATH=" /root/.bashrc
@@ -21,4 +22,4 @@ if [ $? -ne 0 ]; then
   echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /root/.bashrc
 fi
 
-cd ~/C34351CoAP
+# cd /home/user/C34351CoAP
