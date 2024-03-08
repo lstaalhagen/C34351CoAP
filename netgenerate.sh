@@ -4,8 +4,13 @@
 NUMHOSTS="3"
 NOXTERMS="FALSE"
 QUIET="FALSE"
+IPVERSION="4"
 while [[ $# -gt 0 ]]; do
   case $1 in
+    -6|--ipv6)
+      IPVERSION="6"
+      shift
+      ;;
     -h|--help)
       HELP="TRUE"
       shift
@@ -34,13 +39,17 @@ if [ ! -z "${HELP}" ]; then
   echo "Usage: "
   echo "   ${0} -h : Displays this message"
   echo " "
-  echo "   ${0} [--noxterms] [-n|--numhosts N] [-q|--quiet]"
-  echo "      Creates virtual network with hosts connected to a switch. Unless the"
-  echo "      '-x' or '--noxterms' option is given, the script also opens an Xterm"
-  echo "      window on each host. If the '-n' or '--numhosts' option is given, N"
-  echo "      hosts are created; otherwise 3 hosts are created. If the '-q' or"
-  echo "      '--quiet' option is given then the script produces no output if"
-  echo "      successful."
+  echo "   ${0} [-x|--noxterms] [-n|--numhosts N] [-6|--ipv6] [-q|--quiet]"
+  echo "      Creates virtual network with hosts connected to a switch. By default,"
+  echo "      the script creates a virtual network with three hosts connect to a"
+  echo "      virtual switch, assigning IPv4 addresses from the 10.0.0.0/8 address"
+  echo "      range, opens an Xterm window on each host, and writing a status message"
+  echo "      at the end. The behaviour may be modified with the following options:"
+  echo "        -x | --noxterms : Do not open Xterm windows on the hosts."
+  echo "        -n | --numhosts : Create N hosts instead of three."
+  echo "        -6 | --ipv6     : Assign IPv6 addresses (from the fd00::/8 range)"
+  echo "                          instead of IPv4 addresses."
+  echo "        -q | --quiet    : Do not write a status message when done"
   exit
 fi
 
@@ -71,7 +80,11 @@ while [ $NS -le $NUMHOSTS ]; do
 
   # Bring up veth endpoints
   ip netns exec "H${NS}" ip link set dev lo up
-  ip netns exec "H${NS}" ip addr add "10.0.0.${NS}/8" dev "veth${NS}2"
+  if [ "${IPVERSION}" = "4" ]; then
+    ip netns exec "H${NS}" ip addr add "10.0.0.${NS}/8" dev "veth${NS}2"
+  else
+    ip netns exec "H${NS}" ip addr add "fd00::${NS}/8" dev "veth${NS}2"
+  fi
   ip netns exec "H${NS}" ip link set dev "veth${NS}2" up
   ip link set dev "veth${NS}1" up
 
