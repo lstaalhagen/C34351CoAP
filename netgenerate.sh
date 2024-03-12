@@ -100,7 +100,7 @@ while [ $NS -le $NUMHOSTS ]; do
   ovs-vsctl add-port S1 "veth${NS}1"
 
   # Open an xterm window on the host (conditionally)
-  [ "${NOXTERMS}" = "FALSE" ] && ip netns exec "H${NS}" xterm -title "Host H${NS} (10.0.0.${NS})" &
+  [ "${NOXTERMS}" = "FALSE" ] && ip netns exec "H${NS}" xterm -title "Host H${NS}" &
 
   NS=$(($NS + 1))
 done

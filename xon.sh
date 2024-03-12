@@ -1,5 +1,8 @@
 #!/usr/bin/env bash 
 
+# Check for root 
+[ $(id -u) -ne 0 ] && echo "Script must be executed with sudo" && exit 1
+
 if [ ! -d "/var/run/netns" ]; then
   echo "No namespaces. Exiting"
   exit 1
@@ -11,12 +14,18 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-for NS in $(ls /var/run/netns); do
-  if [ "${NS}" = "${1}" ]; then
-    sudo ip netns exec ${NS} xterm & &>/dev/null
-    exit 0
+while [ $# -ne 0 ]; do
+  FOUND="FALSE"
+  for NS in $(ls /var/run/netns); do
+    if [ "${NS}" = "${1}" ]; then
+      FOUND="TRUE"
+      IPADDR=$(ip netns exec ${NS} ip addr | grep "scope global" | awk '{print $2}' | cut -d'/' -f1)
+      ip netns exec "${NS}" xterm -title "Host ${NS} (${IPADDR})" & 
+    fi
+  done
+  if [ "${FOUND}" = "FALSE" ]; then
+    echo "Error: Namespace ${1} not found. Exiting"
+    exit 1
   fi
+  shift
 done
-echo "Error: Namespace ${1} not found. Exiting"
-exit 1
-  
