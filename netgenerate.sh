@@ -88,6 +88,14 @@ while [ $NS -le $NUMHOSTS ]; do
   ip netns exec "H${NS}" ip link set dev "veth${NS}2" up
   ip link set dev "veth${NS}1" up
 
+  # Code to delete the link local address in the namespace
+  if [ "${IPVERSION}" = "6" ]; then
+    IPLL=$(ip netns exec "H${NS}" ip addr show dev "veth${NS}2"|grep -e "inet6 fe80::"|awk '{print $2}')
+    if [ ! -z "${IPLL}" ]; then
+      ip netns exec "H${NS}" ip addr del "${IPLL}" dev "veth${NS}2"
+    fi
+  fi
+
   # Attach veth endpoint in default namespace to switch
   ovs-vsctl add-port S1 "veth${NS}1"
 
