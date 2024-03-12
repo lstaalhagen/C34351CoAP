@@ -22,10 +22,7 @@ if [ $? -ne 0 ]; then
   echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /root/.bashrc
 fi
 
-grep -q -e "^export LD_LIBRARY_PATH=" /user/.bashrc
-if [ $? -ne 0 ]; then
-  echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /user/.bashrc
-fi
-
+# Maybe???
+echo "export LD_LIBRARY_PATH=\"/usr/local/lib\"" >> /home/user/.profile
 
 # cd /home/user/C34351CoAP
