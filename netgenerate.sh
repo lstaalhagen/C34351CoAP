@@ -3,8 +3,8 @@
 # Parse command line parameters
 NUMHOSTS="3"
 NOXTERMS="FALSE"
-QUIET="FALSE"
 IPVERSION="4"
+VERBOSE="FALSE"
 while [[ $# -gt 0 ]]; do
   case $1 in
     -6|--ipv6)
@@ -24,8 +24,8 @@ while [[ $# -gt 0 ]]; do
       shift
       shift
       ;;
-    -q|--quiet)
-      QUIET="TRUE"
+    -v)
+      VERBOSE="TRUE"
       shift
       ;;
     -*|--*)
@@ -49,7 +49,7 @@ if [ ! -z "${HELP}" ]; then
   echo "        -n | --numhosts : Create N hosts instead of three."
   echo "        -6 | --ipv6     : Assign IPv6 addresses (from the fd00::/8 range)"
   echo "                          instead of IPv4 addresses."
-  echo "        -q | --quiet    : Do not write a status message when done"
+  echo "        -v              : Write a status message at the end of the script."
   exit
 fi
 
@@ -108,4 +108,4 @@ done
 # Finally, activate the switch
 ip link set S1 up
 
-[ "${QUIET}" = "FALSE" ] && echo "Done. Virtual network with ${NUMHOSTS} hosts has been created."
+[ "${VERBOSE}" = "TRUE" ] && echo "Done. Virtual network with ${NUMHOSTS} hosts has been created."
