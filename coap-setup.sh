@@ -4,10 +4,12 @@
 [ $(id -u) -ne 0 ] && echo "Script must be executed with sudo" && exit
 
 # Install missing packages
+echo "Installing misc. packages"
 apt-get update
 apt-get -y install asciidoc
 
 # Clone libcoap git repo and install it
+echo "Downloading and installing libcoap"
 git clone https://github.com/obgm/libcoap
 cd libcoap
 ./autogen.sh
@@ -17,6 +19,7 @@ make install
 cd ..
 
 # Hack to get a better default font size in Xterm windows
+echo "Hack 1"
 XRESOURCES=/home/${REALUSER}/.Xresources
 if [ -s $XRESOURCES ]; then
   grep -q -e "^xterm\*faceName:" $XRESOURCES
@@ -32,6 +35,7 @@ else
 fi
 
 # HACK GLOXBDITWPFR
+echo "Hack 2"
 grep -q -e "GLOXBDITWPFR" /root/.bashrc
 if [ $? -ne 0 ]; then
   echo '# HACK GLOXBDITWPFR' >> /root/.bashrc
@@ -41,6 +45,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Fix
+echo "Hack 3"
 grep -q -e "^export LD_LIBRARY_PATH=" /root/.bashrc
 if [ $? -ne 0 ]; then
   echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /root/.bashrc
