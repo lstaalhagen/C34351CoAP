@@ -42,7 +42,11 @@ if [ $? -ne 0 ]; then
   echo 'fi' >> /root/.bashrc
 fi
 
-# Fix
+# Fix to set the LD_LIBRARY_PATH, so that the coap-server
+# and coap-client programs can be run inside Xterm windows
+# on namespaces. Another approach would be needed if the
+# user should be able to run the programs using, e.g., with
+# sudo ip netns <namespace> coap-server ...
 grep -q -e "^export LD_LIBRARY_PATH=" /root/.bashrc
 if [ $? -ne 0 ]; then
   echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /root/.bashrc
