@@ -6,14 +6,10 @@ REALUSER=${SUDO_USER}
 [ -z "${REALUSER}" ] && echo "Environment variable $SUDO_USER not set as expected" && exit
 
 # Install missing packages
-echo "Installing misc. packages"
-sleep 2
 apt-get update
 apt-get -y install asciidoc
 
 # Clone libcoap git repo and install it
-echo "Downloading and installing libcoap"
-sleep 2
 git clone https://github.com/obgm/libcoap
 cd libcoap
 ./autogen.sh
