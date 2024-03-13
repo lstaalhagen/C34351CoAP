@@ -19,8 +19,6 @@ make install
 cd ..
 
 # Hack to get a better default font size in Xterm windows
-echo "Hack 1"
-sleep 2
 XRESOURCES=/home/${REALUSER}/.Xresources
 if [ -s $XRESOURCES ]; then
   grep -q -e "^xterm\*faceName:" $XRESOURCES
@@ -36,8 +34,6 @@ else
 fi
 
 # HACK GLOXBDITWPFR
-echo "Hack 2"
-sleep 2
 grep -q -e "GLOXBDITWPFR" /root/.bashrc
 if [ $? -ne 0 ]; then
   echo '# HACK GLOXBDITWPFR' >> /root/.bashrc
@@ -47,8 +43,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # Fix
-echo "Hack 3"
-sleep 2
 grep -q -e "^export LD_LIBRARY_PATH=" /root/.bashrc
 if [ $? -ne 0 ]; then
   echo "export LD_LIBRARY_PATH=/usr/local/lib" >> /root/.bashrc
