@@ -42,25 +42,25 @@ if [ ! -z "${HELP}" ]; then
   echo "Usage: "
   echo "   ${0} -h : Displays this message"
   echo " "
-  echo "   ${0} [-x|--noxterms] [-n|--numhosts N] [-6|--ipv6] [-q|--quiet]"
+  echo "   ${0} [-x|--noxterms] [-n NUM|--numhosts NUM] [-6|--ipv6] [-q|--quiet]"
   echo "      Creates virtual network with hosts connected to a switch. By default,"
   echo "      the script creates a virtual network with three hosts connect to a"
   echo "      virtual switch, assigning IPv4 addresses from the 10.0.0.0/8 address"
-  echo "      range, opens an Xterm window on each host, and writing a status message"
-  echo "      at the end. The behaviour may be modified with the following options:"
+  echo "      range, opens an Xterm window on each host. The behaviour may be"
+  echo "      modified with the following options:"
   echo "        -x | --noxterms : Do not open Xterm windows on the hosts."
-  echo "        -n | --numhosts : Create N hosts instead of three."
+  echo "        -n | --numhosts : Create NUM hosts instead of three."
   echo "        -6 | --ipv6     : Assign IPv6 addresses (from the fd00::/8 range)"
   echo "                          instead of IPv4 addresses."
   echo "        -v              : Write a status message at the end of the script."
-  exit 0
+  exit
 fi
 
 # Check for root 
 [ $(id -u) -ne 0 ] && echo "Script must be executed with sudo" && exit 1
 
-# Create a mosquitto directory in /var/run for PID
-[ ! -d /var/run/mosquitto ] && mkdir -p /var/run/mosquitto &&  chown mosquitto: /var/run/mosquitto
+# Check for terminal
+[ "$TERM" = "xterm" ] && echo "Please execute script in normal terminal" && exit
 
 # Run clearnet just to be on the safe side
 [ -s ./clearnet.sh ] && . ./clearnet.sh
